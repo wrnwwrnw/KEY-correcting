@@ -24,9 +24,9 @@ def search(query,layer_idx,threshold,topk,cacheidx,index_grid):
     xq /= np.linalg.norm(xq, axis=1, keepdims=True)
     for head in range(xq.shape[0]):
         if head==0:
-            cacheidx[layer_idx], _ = index_grid[layer_idx][head].search(xq[head:head+1], topk)
+            _ , cacheidx[layer_idx] = index_grid[layer_idx][head].search(xq[head:head+1], topk)
             cacheidx[layer_idx] = cacheidx[layer_idx].astype(np.int64)
         else:
-            result, _ = index_grid[layer_idx][head].search(xq[head:head+1], topk)
+            _ , result = index_grid[layer_idx][head].search(xq[head:head+1], topk)
             result = result.astype(np.int64)
             cacheidx[layer_idx] = np.concatenate((cacheidx[layer_idx], result), axis=0)
