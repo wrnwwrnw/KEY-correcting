@@ -4,11 +4,11 @@ import torch
 import multiprocessing
 
 def build(cache,index_grid,ifindex):
-        # layer_count = len(cache.value_cache)
-        # for i in range(layer_count):
-        #    build_layer(cache.key_cache[i],i,index_grid)
-        # ifindex[0] = 2
-    pass
+        layer_count = len(cache.value_cache)
+        for i in range(layer_count):
+           build_layer(cache.key_cache[i],i,index_grid)
+        ifindex[0] = 2
+    # pass
 def build_layer(xb,layer_idx,index_grid):
     # with open("read.txt", "a", encoding="utf-8", buffering=1) as f:
     # f.write(f"xb: {xb}\n")
