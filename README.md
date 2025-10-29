@@ -6,5 +6,5 @@ This repository provides an experimental implementation inspired by **SnapKV** f
 
 ## Environment
 The project requires the following key dependencies:
-- `transformers==4.37.0`  
-- `flash-attn==2.5.4`  
+- `transformers==4.57.1`  
+- `flash-attn==2.5.8`  
