@@ -46,4 +46,4 @@ def replace_mistral(use_index, window_compress_ratio, index_mode):
     if warning_flag:
         warnings.warn(f"Transformers version {transformers_version} might not be compatible with RACC. RACC is tested with Transformers version {version_list}.")
     transformers.generation.GenerationMixin.prepare_inputs_for_generation = prepare_inputs_for_generation_mistral_4_57
-    transformers.models.llama.modeling_mistral.MistralAttention.forward = mistral_attention_forward_4_57
+    transformers.models.mistral.modeling_mistral.MistralAttention.forward = mistral_attention_forward_4_57
