@@ -94,7 +94,6 @@ def mistral_attention_forward(
             del mistral_attention_forward.cacheidx
             del mistral_attention_forward.index_grid
             del mistral_attention_forward.ifindex
-        # 构造cpu容器、索引容器[层][头]、构建索引状态码,-1表示静止，0表示可以构建，1表示正在构造，2表示构造完成
         if not hasattr(mistral_attention_forward, "cache"):
             mistral_attention_forward.cache = DynamicCache()
         if not hasattr(mistral_attention_forward, "cacheidx"):
@@ -160,7 +159,6 @@ def mistral_attention_forward(
                     search(query_states ,self.layer_idx ,0 ,int(self.kv_seq_len / 100) ,mistral_attention_forward.cacheidx ,mistral_attention_forward.index_grid ,mistral_attention_forward.cache)
                 # 查询
                 if mistral_attention_forward.count2>360:
-                    # 创建表格存储注意力打分
                     if hasattr(mistral_attention_forward, "sheet") and mistral_attention_forward.count2 == 361 and self.layer_idx ==0:
                         del mistral_attention_forward.sheet
                     if not hasattr(mistral_attention_forward, "sheet"):
@@ -169,12 +167,10 @@ def mistral_attention_forward(
                     attn_weight = torch.matmul(query_states, key_states[:, :, mistral_attention_forward.conut3:mistral_attention_forward.conut3+mistral_attention_forward.sheet.shape[3], :].transpose(2, 3)) / math.sqrt(head_dim)
                     attn_weight = nn.functional.softmax(attn_weight, dim=-1, dtype=torch.float32).to(query_states.dtype)
                     mistral_attention_forward.sheet[self.layer_idx, mistral_attention_forward.count2-361, :, :] = attn_weight.squeeze(0).squeeze(1)
-                    # 这段有点问题，如果满了400个进剪枝逻辑
                     if mistral_attention_forward.count2==400:
                         key_states_compress, value_states_compress = self.kv_cluster.update_kv_decode(key_states, value_states, mistral_attention_forward.sheet, self.layer_idx, mistral_attention_forward.cache, mistral_attention_forward.conut3, self.kv_seq_len, cache_kwargs,mistral_attention_forward.ifindex, mistral_attention_forward.cacheidx)
                         past_key_values.layers[self.layer_idx].keys = key_states_compress
                         past_key_values.layers[self.layer_idx].values = value_states_compress
-                        #这次修剪结束，重置计数单位
                         if self.layer_idx == 31:
                             mistral_attention_forward.count2 = 0
         attention_interface: Callable = eager_attention_forward
@@ -243,7 +239,6 @@ def mistral_attention_forward(
                 key_states, value_states = past_key_values.update(key_states, value_states, self.layer_idx, cache_kwargs)
 
                 if mistral_attention_forward.count2>360:
-                    # 创建表格存储注意力打分，用于后续压缩
                     if hasattr(mistral_attention_forward, "sheet") and mistral_attention_forward.count2 == 361 and self.layer_idx ==0:
                         del mistral_attention_forward.sheet
                     if not hasattr(mistral_attention_forward, "sheet"):
@@ -253,12 +248,10 @@ def mistral_attention_forward(
                     attn_weight = nn.functional.softmax(attn_weight, dim=-1, dtype=torch.float32).to(query_states.dtype)
                     
                     mistral_attention_forward.sheet[self.layer_idx, mistral_attention_forward.count2-361, :, :] = attn_weight.squeeze(0).squeeze(1)
-                    # 这段有点问题，如果满了400个进剪枝逻辑
                     if mistral_attention_forward.count2==400:
                         key_states_compress, value_states_compress = self.kv_cluster.update_kv_decode_concise(key_states, value_states, mistral_attention_forward.sheet, self.layer_idx, mistral_attention_forward.conut3, self.kv_seq_len, cache_kwargs)
                         past_key_values.layers[self.layer_idx].keys = key_states_compress
                         past_key_values.layers[self.layer_idx].values = value_states_compress
-                        #这次修剪结束，重置计数单位
                         if self.layer_idx == 31:
                             mistral_attention_forward.count2 = 0
         attention_interface: Callable = eager_attention_forward
