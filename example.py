@@ -40,10 +40,7 @@ qa_pipeline = pipeline(
 
 # input 
 question = """
-The neon hum of the cryo-chamber faded as Dr. Elara Voss pried open the frost-rimmed hatch. Her breath crystallized in the air—a bad sign. Protocol demanded the lab maintain -18°C, but the readout showed -23.4°C and dropping. The anomaly detector blipped erratically, casting jagged red shadows across walls lined with containment units holding specimens from Kepler-452b.
-She almost missed the faint pattern in the chaos. Buried beneath the thermal alerts was a rhythmic pulse in the quantum entanglement logs—exactly 11.7-second intervals matching no known celestial phenomenon. Her glove hovered over the emergency purge button when the specimen wall lit up. Bioluminescent tendrils inside Pod #7 writhed like living circuitry, their glow synchronizing with the pulses. The Kepler moss they'd deemed inert three years ago was communicating. Or calculating.
-The lab AI's voice crackled unnaturally: "Thermal core breach in Sector—" before dissolving into static. Elara's retinal display flickered with corrupted data streams. Through the distortion, she glimpsed security footage from ten minutes prior—her own silhouette still working at the terminal, though she'd been in the cafeteria then. The moss tendrils now formed perfect Fibonacci spirals.
-Her hand froze mid-reach for the manual override. The cryo-chamber's frost patterns had changed. What she'd mistaken for random crystallization now clearly depicted the Cassiopeia constellation—mirroring the scar on her collarbone from childhood radiation treatment. A treatment administered after
+The neon hum of the 
 """
 
 start_time = time.time()
